@@ -12,12 +12,20 @@ exports.headers = headers = {
 };
 
 exports.serveAssets = function(res, asset, callback) {
-  fs.readFile("../web/public/" + asset, function(error, data){
+  // if (asset === "/index.html")  
+  //   asset = archive.paths.siteAssets + assets;
+  // }
+  var status = 200;
+  fs.readFile(archive.paths.siteAssets + asset, function(error, data){
     console.log(asset);
-    var status = 200;
-    console.log(error);
-    res.writeHead(status, headers);
-    res.end(data);
+    if (error){
+        fs.readFile(archive.paths.archivedSites + asset, function(error, data){
+          sendResponse(res, data, status);
+        })
+    }else{
+      sendResponse(res, data, status);
+    }
+    
   })
 
   // Write some code here that helps serve up your static files!
@@ -25,7 +33,7 @@ exports.serveAssets = function(res, asset, callback) {
   // css, or anything that doesn't change often.)
 };
 
-exports.sendResponse = function(res, message, statusCode){
+var sendResponse = function(res, message, statusCode){
   var statusCode = statusCode || 200;
   res.writeHead(statusCode, headers);
   res.end(message);
