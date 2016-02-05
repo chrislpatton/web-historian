@@ -20,6 +20,9 @@ exports.serveAssets = function(res, asset, callback) {
     console.log(asset);
     if (error){
         fs.readFile(archive.paths.archivedSites + asset, function(error, data){
+          if (error){
+            sendResponse(res, "File Not Found", 404);
+          }
           sendResponse(res, data, status);
         })
     }else{
@@ -38,6 +41,8 @@ var sendResponse = function(res, message, statusCode){
   res.writeHead(statusCode, headers);
   res.end(message);
 }
+
+exports.sendResponse = sendResponse;
 
 
 // As you progress, keep thinking about what helper functions you can put here!

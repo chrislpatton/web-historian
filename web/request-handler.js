@@ -14,7 +14,7 @@ var actions = {
   }else{
     urlPath = parts.pathname;
   }
-  console.log(parts.pathname);
+  
   utils.serveAssets(res, urlPath);
   
   
@@ -22,9 +22,16 @@ var actions = {
     // res.end(archive.paths.list);
   },
   "POST": function(req, res){
-    // req.on("data", function(data){
-    // console.log(data);
-  
+    req.on("data", function(data){
+      var parsed = JSON.parse(data);
+      archive.addUrlToList(parsed.url, function(found){
+        utils.sendResponse(res, found, 302);
+      });
+
+    })
+   
+    
+    
   }
 };
 
