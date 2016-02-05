@@ -36,13 +36,29 @@ exports.serveAssets = function(res, asset, callback) {
   // css, or anything that doesn't change often.)
 };
 
-var sendResponse = function(res, message, statusCode){
+  var sendResponse = function(res, message, statusCode){
   var statusCode = statusCode || 200;
   res.writeHead(statusCode, headers);
   res.end(message);
 }
 
-exports.sendResponse = sendResponse;
+
+exports.redirect = function(response, location, status){
+  status = status || 302;
+  response.writeHead(status, {Location: location});
+  response.end();
+};
+
+exports.postData = function(request, callback){
+    var data = "";
+    request.on('data', function(chunk){
+      data += chunk;
+    });
+    
+    request.on('end', function(){
+      callback(data);
+    });
+  };
 
 
 // As you progress, keep thinking about what helper functions you can put here!

@@ -38,21 +38,22 @@ exports.readListOfUrls = function(callback){
   
 };
 
-exports.isUrlInList = function(data, callback){
+exports.isUrlInList = function(url, callback){
   var found;
   exports.readListOfUrls(function(list){
-    found = _.contains(list, data)
+    found = _.contains(list, url)
   })
   callback(found);
 };
 
 exports.addUrlToList = function(url, callback){
   
-  fs.appendFile(exports.paths.list, url + "\n", function(err){
-    if (err){
-      console.log(err);
-    }
-   callback();
+  fs.appendFile(exports.paths.list, url.toString().concat("\n"), function(err,url){
+    // if (err){
+    //   console.log(err);
+     callback(url);
+    //}
+  
   });
 };
 
